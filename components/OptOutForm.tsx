@@ -10,12 +10,13 @@ const OptOutForm = ({}: OptOutFormProps) => {
 
   return (
     <div className="flex flex-col mx-4 rounded-lg shadow-lg shadow-slate-500/40 md:flex-row md:mx-6">
-      <div className="bg-slate-100 border border-solid border-slate-200 flex-auto p-16 rounded-tl-lg rounded-tr-lg w-full md:rounded-bl-lg md:rounded-tr-none md:w-2/5">
+      <div className="bg-slate-100 border border-solid border-slate-200 flex flex-col justify-between p-16 rounded-tl-lg rounded-tr-lg w-full md:rounded-bl-lg md:rounded-tr-none md:w-2/5">
         <h1 className="font-bold text-4xl text-dark-gray">Opt-Out</h1>
-        <p className="text-xs text-slate-400">
-          Still need help? Email <a href="mailto:privacy@test.com" className="font-semibold text-blue-700 hover:text-blue-500">privacy@test.com</a>
+        <p className="hidden text-xs text-slate-400 md:block">
+          Still need help? Email <a href="mailto:privacy@site.com" className="font-semibold text-blue-700 hover:text-blue-500">privacy@site.com</a>
         </p>
       </div>
+
       <div className="bg-white border border-solid border-slate-100 flex-auto p-16 rounded-br-lg rounded-bl-lg w-full md:rounded-bl-none md:rounded-tr-lg md:w-3/5">
         <h3 className="font-semibold mb-2 text-dark-gray">
           Enter your email and/or phone
@@ -45,6 +46,9 @@ const OptOutForm = ({}: OptOutFormProps) => {
             </button>
           </div>
         </form>
+        <p className="mt-6 text-center text-xs text-slate-400 md:hidden">
+          Still need help? Email <a href="mailto:privacy@test.com" className="font-semibold text-blue-700 hover:text-blue-500">privacy@test.com</a>
+        </p>
       </div>
     </div>
   );
