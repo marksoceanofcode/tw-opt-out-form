@@ -1,7 +1,14 @@
 {
   "name": "tw-opt-out-form",
-  "version": "0.1.1",
-  "private": true,
+  "displayName": "Tailwind Opt-Out Form",
+  "description": "A simple form for users to opt-out built using tailwindcss, next, react, and react hook forms.",
+  "version": "0.1.2",
+  "publisher": "marksoceanofcode",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marksoceanofcode/tw-opt-out-form"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,19 +18,20 @@
   "dependencies": {
     "@headlessui/react": "^2.2.4",
     "@headlessui/tailwindcss": "^0.2.2",
+    "next": "^15.3.3",
     "react": "^19",
     "react-dom": "^19",
     "react-hook-form": "^7.54.2",
-    "next": "^15.3.3"
+    "react-imask": "^7.6.1"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^8",
+    "eslint-config-next": "^15.3.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "^15.3.3"
+    "typescript": "^5"
   }
 }
