@@ -2,10 +2,16 @@ import { Switch } from "@headlessui/react";
 import { useForm } from "react-hook-form";
 
 export type OptOutFormProps = {
-
+  disableEmailInput?: boolean
+  disablePhoneInput?: boolean
+  onSubmit: Function
 };
 
-const OptOutForm = ({}: OptOutFormProps) => {
+const OptOutForm = ({
+  disableEmailInput=false,
+  disablePhoneInput=false,
+  onSubmit
+}: OptOutFormProps) => {
   const inputClassNames = "border border-gray-200 mb-4 px-4 py-2 rounded w-full"
 
   return (
@@ -21,25 +27,34 @@ const OptOutForm = ({}: OptOutFormProps) => {
         <h3 className="font-semibold mb-2 text-dark-gray">
           Enter your email and/or phone
         </h3>
-        <form>
-          <input
-            id="email"
-            className={inputClassNames}
-            name="email"
-            maxLength={256}
-            placeholder="Email"
-            title="Enter email address"
-            type="email"
-          />
-          <input
-            id="phone"
-            className={inputClassNames}
-            name="phone"
-            pattern="[0-9]+"
-            placeholder="Phone"
-            title="Enter phone number"
-            type="text"
-          />
+        <form onSubmit={onSubmit()}>
+          { disableEmailInput ?
+            ""
+            :
+            <input
+              id="email"
+              className={inputClassNames}
+              name="email"
+              maxLength={256}
+              placeholder="Email"
+              title="Enter email address"
+              type="email"
+            />
+          }
+          { disablePhoneInput ?
+            ""
+            :
+            <input
+              id="phone"
+              className={inputClassNames}
+              name="phone"
+              pattern="[0-9]+"
+              placeholder="Phone"
+              title="Enter phone number"
+              type="text"
+            />
+          }
+          
           <div className="flex justify-center items-center">
             <button className="bg-blue-700 font-semibold px-5 py-3 rounded-full text-base text-center text-white w-full hover:bg-blue-500 md:w-1/2">
               Submit
