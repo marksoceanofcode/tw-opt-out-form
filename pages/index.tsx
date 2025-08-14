@@ -11,6 +11,8 @@ export default function Home() {
     >
       <div className="mt-16 max-w-6xl w-full">
         <OptOutForm
+          email="privacy@oursite.com"
+          removeEmailInput={true}
           onSubmit={onOptOutSubmit}
         />
       </div>
