@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import OptOutForm from "../components/OptOutForm"
-import { onOptOutSubmit } from "../utils/helpers"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,8 +11,9 @@ export default function Home() {
       <div className="mt-16 max-w-6xl w-full">
         <OptOutForm
           email="privacy@oursite.com"
-          removeEmailInput={true}
-          onSubmit={onOptOutSubmit}
+          removeComboInput={true}
+          removeEmailInput={false}
+          removePhoneInput={false}
         />
       </div>
       

@@ -1,28 +1,41 @@
-import { Switch } from "@headlessui/react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { IMaskInput } from "react-imask" 
-import { formatPhone } from "../utils/helpers"
+import { useRef } from 'react';
+import { formErrorMessages } from "@/config/errors.config";
+
 
 export type OptOutFormProps = {
   email: string
-  onSubmit: Function
   removeComboInput?: boolean
   removeEmailInput?: boolean
   removePhoneInput?: boolean
 };
 
 const OptOutForm = ({
-  onSubmit,
   email="",
   removeComboInput=false,
-  removeEmailInput=false,
-  removePhoneInput=false,
+  removeEmailInput=true,
+  removePhoneInput=true,
 }: OptOutFormProps) => {
-  const inputClassNames = "border border-gray-200 mb-4 px-4 py-2 rounded w-full"
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    register,
+    setValue,
+    trigger,
+  } = useForm()
+
+  //Implement useRefs
+  const comboRef = useRef(null);
+  const comboInputRef = useRef(null);
+
+  //Define classes for styling certian elements
+  const errorContainerClassNames = "mt-1 ml-2 text-xs text-red-500"
+  const inputClassNames = "border border-gray-200 px-4 py-2 rounded w-full"
   const linkClassNames = "font-semibold text-blue-700 hover:text-blue-500"
 
   const hrefEmail = `mailto:${email}`
-  //const hrefPhone = `tel:${formatPhone(phone)}`
 
   type MessageHelpComponentProps = {
     email: string
@@ -40,7 +53,9 @@ const OptOutForm = ({
     )
   }
 
-  const messageHelp = `Still need help? Email <a href={hrefEmail} className={linkClassNames}>{email}</a>`
+  const onOptOutSubmit = async (data: any) => {
+
+  }
 
   return (
     <div className="flex flex-col mx-4 rounded-lg shadow-lg shadow-slate-500/40 md:flex-row md:mx-6">
@@ -58,36 +73,92 @@ const OptOutForm = ({
         <h3 className="font-semibold mb-2 text-dark-gray">
           Enter your email and/or phone
         </h3>
-        <form onSubmit={onSubmit()}>
-          { removeEmailInput ?
-            ""
+        <form id="optOutForm" onSubmit={handleSubmit(onOptOutSubmit)}>
+          { removeComboInput ?
+            <></>
             :
-            <input
-              id="email"
+            <IMaskInput
               className={inputClassNames}
-              name="email"
-              maxLength={256}
-              placeholder="Email"
-              title="Enter email address"
-              type="email"
+              inputRef={comboInputRef}
+              mask="(000) 000-0000"
+              placeholder='(000) 000-0000'
+              ref={comboRef}
             />
           }
-          { removePhoneInput ?
-            ""
+          { removeEmailInput ?
+            <></>
             :
-            <input
-              id="phone"
-              className={inputClassNames}
-              name="phone"
-              pattern="[0-9]+"
-              placeholder="Phone"
-              title="Enter phone number"
-              type="text"
-            />
+            <div className="mb-4">
+              <input
+                className={inputClassNames}
+                id="email"
+                maxLength={256}
+                placeholder="Email"
+                title="Enter email address"
+                type="email"
+                { ...register('email', {
+                  required: formErrorMessages.email.required,
+                  pattern: /^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$/
+                })}
+              />
+              {errors.email && (
+                <div className={errorContainerClassNames}>
+                  {errors.email.message?.toString()}
+                </div>
+              )}
+            </div>
+          }
+          { removePhoneInput ?
+            <></>
+            :
+            <div className="mb-4">
+              <Controller
+                control={control}
+                name="phone"
+                rules={{
+                  required: formErrorMessages.phone.required,
+                  validate: (value: string) => {
+                    const cleaned = value.replace(/\D/g, '')
+                    return (
+                      cleaned.length === 10 || formErrorMessages.phone.invalid
+                    )
+                  }
+                }}
+                render={({ field: { onChange, onBlur, value, ref }}) => (
+                  <IMaskInput 
+                    id="phone"
+                    mask="(000) 000-0000"
+                    unmask={true}
+                    value={value}
+                    onAccept={(val) => onChange(val)}
+                    onBlur={onBlur}
+                    inputRef={ref}
+                    className={inputClassNames}
+                    placeholder="Phone"
+                    title="Enter phone number"
+                  />
+                )}
+              />
+              {errors.phone && (
+                <div className={errorContainerClassNames}>
+                  {errors.phone.message?.toString()}
+                </div>
+              )}
+              {/* <input
+                className={inputClassNames}
+                id="phone"
+                name="phone"
+                pattern="[0-9]+"
+                placeholder="Phone"
+                title="Enter phone number"
+                
+              /> */}
+              
+            </div>
           }
           
           <div className="flex justify-center items-center">
-            <button className="bg-blue-700 font-semibold px-5 py-3 rounded-2xl text-base text-center text-white w-full hover:bg-blue-500 md:w-1/2">
+            <button className="bg-blue-700 font-semibold px-5 py-3 rounded-2xl text-base text-center text-white w-full hover:bg-blue-500 md:w-64">
               Submit
             </button>
           </div>
