@@ -33,6 +33,7 @@ const OptOutForm = ({
   //Define classes for styling certian elements
   const errorContainerClassNames = "mt-1 ml-2 text-xs text-red-500"
   const inputClassNames = "border border-gray-200 px-4 py-2 rounded w-full"
+  const inputContainerClassNames = "mb-4"
   const linkClassNames = "font-semibold text-blue-700 hover:text-blue-500"
 
   const hrefEmail = `mailto:${email}`
@@ -77,18 +78,27 @@ const OptOutForm = ({
           { removeComboInput ?
             <></>
             :
-            <IMaskInput
-              className={inputClassNames}
-              inputRef={comboInputRef}
-              mask="(000) 000-0000"
-              placeholder='(000) 000-0000'
-              ref={comboRef}
-            />
+            <div className={inputContainerClassNames}>
+              <IMaskInput
+                className={inputClassNames}
+                inputRef={comboInputRef}
+                mask={[
+                  {
+                    mask: "(000) 000-0000"
+                  },
+                  {
+                    mask: /^\S*@?\S*$/
+                  }
+                ]}
+                placeholder='Email or Phone'
+                ref={comboRef}
+              />
+            </div>
           }
           { removeEmailInput ?
             <></>
             :
-            <div className="mb-4">
+            <div className={inputContainerClassNames}>
               <input
                 className={inputClassNames}
                 id="email"
@@ -111,7 +121,7 @@ const OptOutForm = ({
           { removePhoneInput ?
             <></>
             :
-            <div className="mb-4">
+            <div className={inputContainerClassNames}>
               <Controller
                 control={control}
                 name="phone"

@@ -11,9 +11,9 @@ export default function Home() {
       <div className="mt-16 max-w-6xl w-full">
         <OptOutForm
           email="privacy@oursite.com"
-          removeComboInput={true}
-          removeEmailInput={false}
-          removePhoneInput={false}
+          removeComboInput={false}
+          removeEmailInput={true}
+          removePhoneInput={true}
         />
       </div>
       
