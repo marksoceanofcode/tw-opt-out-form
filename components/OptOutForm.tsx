@@ -1,25 +1,72 @@
-import { Switch } from "@headlessui/react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form"
+import { IMaskInput } from "react-imask" 
+import { useRef } from 'react';
+import { formErrorMessages } from "@/config/errors.config";
+
 
 export type OptOutFormProps = {
-  disableEmailInput?: boolean
-  disablePhoneInput?: boolean
-  onSubmit: Function
+  email: string
+  removeComboInput?: boolean
+  removeEmailInput?: boolean
+  removePhoneInput?: boolean
 };
 
 const OptOutForm = ({
-  disableEmailInput=false,
-  disablePhoneInput=false,
-  onSubmit
+  email="",
+  removeComboInput=false,
+  removeEmailInput=true,
+  removePhoneInput=true,
 }: OptOutFormProps) => {
-  const inputClassNames = "border border-gray-200 mb-4 px-4 py-2 rounded w-full"
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    register,
+    setValue,
+    trigger,
+  } = useForm()
+
+  //Implement useRefs
+  const comboRef = useRef(null);
+  const comboInputRef = useRef(null);
+
+  //Define classes for styling certian elements
+  const errorContainerClassNames = "mt-1 ml-2 text-xs text-red-500"
+  const inputClassNames = "border border-gray-200 px-4 py-2 rounded w-full"
+  const inputContainerClassNames = "mb-4"
+  const linkClassNames = "font-semibold text-blue-700 hover:text-blue-500"
+
+  const hrefEmail = `mailto:${email}`
+
+  type MessageHelpComponentProps = {
+    email: string
+    hrefEmail: string
+  }
+
+  const MessageHelpComponent = ({
+    email,
+    hrefEmail,
+  }: MessageHelpComponentProps) => {
+    return (
+      <>
+        Still need help? Email <a href={hrefEmail} className={linkClassNames}>{email}</a>
+      </> 
+    )
+  }
+
+  const onOptOutSubmit = async (data: any) => {
+
+  }
 
   return (
     <div className="flex flex-col mx-4 rounded-lg shadow-lg shadow-slate-500/40 md:flex-row md:mx-6">
       <div className="bg-slate-100 border border-solid border-slate-200 flex flex-col justify-between p-16 rounded-tl-lg rounded-tr-lg w-full md:rounded-bl-lg md:rounded-tr-none md:w-2/5">
         <h1 className="font-bold text-4xl text-dark-gray">Opt-Out</h1>
         <p className="hidden text-xs text-slate-400 md:block">
-          Still need help? Email <a href="mailto:privacy@site.com" className="font-semibold text-blue-700 hover:text-blue-500">privacy@site.com</a>
+          <MessageHelpComponent
+            email={email}
+            hrefEmail={hrefEmail}
+          />
         </p>
       </div>
 
@@ -27,42 +74,110 @@ const OptOutForm = ({
         <h3 className="font-semibold mb-2 text-dark-gray">
           Enter your email and/or phone
         </h3>
-        <form onSubmit={onSubmit()}>
-          { disableEmailInput ?
-            ""
+        <form id="optOutForm" onSubmit={handleSubmit(onOptOutSubmit)}>
+          { removeComboInput ?
+            <></>
             :
-            <input
-              id="email"
-              className={inputClassNames}
-              name="email"
-              maxLength={256}
-              placeholder="Email"
-              title="Enter email address"
-              type="email"
-            />
+            <div className={inputContainerClassNames}>
+              <IMaskInput
+                className={inputClassNames}
+                inputRef={comboInputRef}
+                mask={[
+                  {
+                    mask: "(000) 000-0000"
+                  },
+                  {
+                    mask: /^\S*@?\S*$/
+                  }
+                ]}
+                placeholder='Email or Phone'
+                ref={comboRef}
+              />
+            </div>
           }
-          { disablePhoneInput ?
-            ""
+          { removeEmailInput ?
+            <></>
             :
-            <input
-              id="phone"
-              className={inputClassNames}
-              name="phone"
-              pattern="[0-9]+"
-              placeholder="Phone"
-              title="Enter phone number"
-              type="text"
-            />
+            <div className={inputContainerClassNames}>
+              <input
+                className={inputClassNames}
+                id="email"
+                maxLength={256}
+                placeholder="Email"
+                title="Enter email address"
+                type="email"
+                { ...register('email', {
+                  required: formErrorMessages.email.required,
+                  pattern: /^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$/
+                })}
+              />
+              {errors.email && (
+                <div className={errorContainerClassNames}>
+                  {errors.email.message?.toString()}
+                </div>
+              )}
+            </div>
+          }
+          { removePhoneInput ?
+            <></>
+            :
+            <div className={inputContainerClassNames}>
+              <Controller
+                control={control}
+                name="phone"
+                rules={{
+                  required: formErrorMessages.phone.required,
+                  validate: (value: string) => {
+                    const cleaned = value.replace(/\D/g, '')
+                    return (
+                      cleaned.length === 10 || formErrorMessages.phone.invalid
+                    )
+                  }
+                }}
+                render={({ field: { onChange, onBlur, value, ref }}) => (
+                  <IMaskInput 
+                    id="phone"
+                    mask="(000) 000-0000"
+                    unmask={true}
+                    value={value}
+                    onAccept={(val) => onChange(val)}
+                    onBlur={onBlur}
+                    inputRef={ref}
+                    className={inputClassNames}
+                    placeholder="Phone"
+                    title="Enter phone number"
+                  />
+                )}
+              />
+              {errors.phone && (
+                <div className={errorContainerClassNames}>
+                  {errors.phone.message?.toString()}
+                </div>
+              )}
+              {/* <input
+                className={inputClassNames}
+                id="phone"
+                name="phone"
+                pattern="[0-9]+"
+                placeholder="Phone"
+                title="Enter phone number"
+                
+              /> */}
+              
+            </div>
           }
           
           <div className="flex justify-center items-center">
-            <button className="bg-blue-700 font-semibold px-5 py-3 rounded-full text-base text-center text-white w-full hover:bg-blue-500 md:w-1/2">
+            <button className="bg-blue-700 font-semibold px-5 py-3 rounded-2xl text-base text-center text-white w-full hover:bg-blue-500 md:w-64">
               Submit
             </button>
           </div>
         </form>
         <p className="mt-6 text-center text-xs text-slate-400 md:hidden">
-          Still need help? Email <a href="mailto:privacy@test.com" className="font-semibold text-blue-700 hover:text-blue-500">privacy@test.com</a>
+          <MessageHelpComponent
+            email={email}
+            hrefEmail={hrefEmail}
+          />
         </p>
       </div>
     </div>
