@@ -2,7 +2,7 @@
   "name": "tw-opt-out-form",
   "displayName": "Tailwind Opt-Out Form",
   "description": "A simple form for users to opt-out built using tailwindcss, next, react, and react hook forms.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "publisher": "marksoceanofcode",
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
