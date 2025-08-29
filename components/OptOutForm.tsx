@@ -32,8 +32,9 @@ const OptOutForm = ({
 
   //Define classes for styling certian elements
   const errorContainerClassNames = "mt-1 ml-2 text-xs text-red-500"
-  const inputClassNames = "border border-gray-200 px-4 py-2 rounded w-full"
+  const inputClassNames = "border border-gray-200 peer px-4 py-2 rounded w-full"
   const inputContainerClassNames = "mb-4"
+  const labelClassNames = "bg-white peer-empty:hidden px-1 relative text-gray-400 text-sm left-3 top-2"
   const linkClassNames = "font-semibold text-blue-700 hover:text-blue-500"
 
   const hrefEmail = `mailto:${email}`
@@ -111,6 +112,9 @@ const OptOutForm = ({
                   pattern: /^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$/
                 })}
               />
+              <label className={labelClassNames}>
+                Email
+              </label>
               {errors.email && (
                 <div className={errorContainerClassNames}>
                   {errors.email.message?.toString()}
@@ -135,18 +139,23 @@ const OptOutForm = ({
                   }
                 }}
                 render={({ field: { onChange, onBlur, value, ref }}) => (
-                  <IMaskInput 
-                    id="phone"
-                    mask="(000) 000-0000"
-                    unmask={true}
-                    value={value}
-                    onAccept={(val) => onChange(val)}
-                    onBlur={onBlur}
-                    inputRef={ref}
-                    className={inputClassNames}
-                    placeholder="Phone"
-                    title="Enter phone number"
-                  />
+                  <>
+                    <label className={labelClassNames}>
+                      Phone
+                    </label>
+                    <IMaskInput 
+                      id="phone"
+                      mask="(000) 000-0000"
+                      unmask={true}
+                      value={value}
+                      onAccept={(val) => onChange(val)}
+                      onBlur={onBlur}
+                      inputRef={ref}
+                      className={inputClassNames}
+                      placeholder="Phone"
+                      title="Enter phone number"
+                    />
+                  </>
                 )}
               />
               {errors.phone && (
