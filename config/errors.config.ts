@@ -10,6 +10,10 @@ export const formErrorMessages: Record<string, ErrorsConfig> = {
     },
     phone: {
         invalid: "Please enter a valid phone number.",
-        required: "Phone required.",
+        required: "Phone number required.",
+    },
+    emailPhone: {
+        invalid: "Please enter a valid email or phone number.",
+        required: "Email or Phone number required.",
     }
 }
