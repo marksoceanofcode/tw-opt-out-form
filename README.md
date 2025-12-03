@@ -7,6 +7,7 @@ I wanted to create a form that could be used for opt-out out of communications. 
 - Mobile and Desktop responsive
 - Button disables after form submit in the onclick function
 - Easily modifiable should you want to pass a handler function in for the button click
+- Uses react-imask for phone number input formatting
 
 ## OptOutForm - Component Parameters
 ```bash
@@ -25,6 +26,12 @@ removePhoneInput?: boolean //If "true", remove the phone input. "true" is defaul
     removePhoneInput={true}
 />
 ```
+
+## Dependencies
+- react ^19
+- react-hook-form ^7.54.2
+- react-imask ^7.6.1
+- tailwindcss ^3 //I think this would work fine with v4 maybe with some modification
 
 ## To Run Locally
 Install the packages:
