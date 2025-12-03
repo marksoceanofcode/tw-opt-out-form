@@ -222,7 +222,7 @@ const OptOutForm = ({
 
               <div className="flex justify-center items-center">
                 <button
-                  className="bg-blue-700 font-semibold px-5 py-3 rounded-2xl text-base text-center text-white w-full hover:bg-blue-500 md:w-64"
+                  className="bg-blue-700 font-semibold px-5 py-3 rounded-2xl text-base text-center text-white w-full disabled:bg-blue-300 hover:bg-blue-500 md:w-64"
                   disabled={disableFormButton}
                 >
                   Submit
